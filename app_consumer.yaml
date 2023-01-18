@@ -1,7 +1,0 @@
-env: standard
-runtime: nodejs12
-service: consumer
-handlers:
-  - url: /.*
-    secure: always
-    script: auto
