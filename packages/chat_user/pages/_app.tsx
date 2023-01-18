@@ -4,7 +4,7 @@ import { AppProps } from "next/app"
 import { useRouter } from "next/router"
 import { analytics, auth, LanguageOption } from "@project/shared"
 import { useEffect, useState } from "react"
-import { signOut, onAuthStateChanged } from "firebase/auth"
+import { onAuthStateChanged } from "firebase/auth"
 import { message } from "antd"
 import { CloseCircleFilled } from "@ant-design/icons"
 import { useTranslation } from "react-i18next"
@@ -27,7 +27,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const routers = useRouter()
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
-  const [isOwner, setIsOwner] = useState(false)
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -56,19 +55,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     onAuthStateChanged(auth, async (user) => {
       try {
         if (user !== null) {
-          const idToken = await user!.getIdTokenResult()
-          if (idToken.claims["role"] === "skeleton-owner") {
-            setUser(user)
-            setIsOwner(true)
-          } else {
-            signOut(auth)
-            setUser(null)
-            message.error({
-              key: "01",
-              icon: <CloseCircleFilled onClick={() => message.destroy("01")} />,
-              content: t("Unauthorized user"),
-            })
-          }
+          setUser(user)
         }
         setLoading(false)
       } catch (error) {
@@ -89,16 +76,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
-        <title>{"Owner"}</title>
+        <title>{"Chat App"}</title>
       </Head>
       <GlobalStyles />
       <QueryClientProvider client={queryClient}>
-        <AuthProvider
-          loading={loading}
-          user={user}
-          isOwner={isOwner}
-          setUser={setUser}
-        >
+        <AuthProvider loading={loading} user={user} setUser={setUser}>
           <Component {...pageProps} />
           {process.env.NEXT_PUBLIC_ENVIRONMENT === "development" ? (
             <LanguageOption />

@@ -30,8 +30,7 @@
   "scripts": {
     "bootstrap": "yarn install && lerna bootstrap",
     "rimraf": "./node_modules/rimraf/bin.js",
-    "package:owner": "node -r ./dotenv.config.js node_modules/lerna/cli.js run --scope owner --stream dev",
-    "package:consumer": "node -r ./dotenv.config.js node_modules/lerna/cli.js run --scope consumer --stream dev",
+    "package:chat_user": "node -r ./dotenv.config.js node_modules/lerna/cli.js run --scope owner --stream dev",
     "test": "jest --watch",
     "start": "next start -p 8080",
     "local:start": "node -r ./dotenv.config.js node_modules/lerna/cli.js run --parallel dev",
@@ -39,17 +38,13 @@
     "build-storybook": "build-storybook",
     "lint-staged": "lint-staged",
     "format": "eslint -c .eslintrc.js --ignore-path .eslintignore --fix",
-    "nextstart:consumer": "yarn --cwd ./packages/consumer start",
     "nextstart:owner": "yarn --cwd ./packages/owner start",
     "next:start": "node -r ./dotenv.config.js node_modules/.bin/run-p --print-label nextstart:*",
-    "build:consumer": "node -r ./dotenv.config.js node_modules/lerna/cli.js run --scope consumer build",
-    "build:owner": "node -r ./dotenv.config.js node_modules/lerna/cli.js run --scope owner build",
-    "pre-deploy:owner": "rimraf public && copyfiles -au 3 packages/owner/public/assets/**/* public/ && copyfiles -au 3 packages/owner/public/**/* public/",
-    "pre-deploy:consumer": "rimraf public && copyfiles -au 3 packages/consumer/public/assets/**/* public/ && copyfiles -au 3 packages/consumer/public/**/* public/",
-    "build:gae:owner": "rimraf build && yarn run build:owner && yarn run pre-deploy:owner",
-    "build:gae:consumer": "rimraf build && yarn run build:consumer && yarn run pre-deploy:consumer",
-    "deploy:gae:owner": "yarn run build:gae:owner && gcloud app deploy app_owner.yaml --project XXXXXXXXX",
-    "deploy:gae:consumer": "yarn run build:gae:consumer && gcloud app deploy app_consumer.yaml --project XXXXXXXXX"
+    "build:chat_user": "node -r ./dotenv.config.js node_modules/lerna/cli.js run --scope owner build",
+    "pre-deploy:chat_user": "rimraf public && copyfiles -au 3 packages/owner/public/assets/**/* public/ && copyfiles -au 3 packages/owner/public/**/* public/",
+    "build:gae:chat_user": "rimraf build && yarn run build:owner && yarn run pre-deploy:owner",
+    "deploy:gae:chat_user": "yarn run build:gae:owner && gcloud app deploy app_owner.yaml --project XXXXXXXXX"
+
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

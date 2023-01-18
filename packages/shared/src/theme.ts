@@ -147,7 +147,7 @@ export const theme = {
   gray: "#F8F8F8",
   alert: "#EB5757",
   lightBlue: "#B9CBF2",
-  bgColor: "#f3f4f6",
+  bgColor: "#25063c",
   typography: {
     typographyH1,
     typographyH2,

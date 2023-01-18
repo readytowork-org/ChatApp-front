@@ -8,11 +8,11 @@ import { TextField, Button, auth, theme } from "@project/shared"
 import styled from "styled-components"
 import * as Sentry from "@sentry/node"
 import { CloseCircleFilled } from "@ant-design/icons"
-import { signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword } from "firebase/auth"
 import RestrictedRoute from "../../withRestrictedRoute"
 import Link from "next/link"
 
-interface LoginType {
+interface RegisterType {
   email: string
   password: string
 }
@@ -61,6 +61,7 @@ const BottomTextWrapper = styled.div`
     margin-top: 2px;
   }
 `
+
 const TextFieldWrapper = styled.div`
   margin-top: 35px;
 `
@@ -101,7 +102,7 @@ const LoginPage: React.FC = () => {
     password: yup.string().required(t("Please enter")),
   })
 
-  const formik = useFormik<LoginType>({
+  const formik = useFormik<RegisterType>({
     initialValues: {
       email: "",
       password: "",
@@ -113,7 +114,7 @@ const LoginPage: React.FC = () => {
   const handleLogin = async () => {
     setLoading(true)
     try {
-      const data = await signInWithEmailAndPassword(
+      const data = await createUserWithEmailAndPassword(
         auth,
         formik.values.email,
         formik.values.password
@@ -165,11 +166,11 @@ const LoginPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>{"Login"}</title>
+        <title>{"Register"}</title>
       </Head>
       <Container>
         <LoginWrapper>
-          <span className={"header"}>{"Login"}</span>
+          <span className={"header"}>{"Register"}</span>
           <TextFieldWrapper>
             <form onSubmit={formik.handleSubmit}>
               <InputFieldWrapper>
@@ -200,13 +201,13 @@ const LoginPage: React.FC = () => {
                 />
               </InputFieldWrapper>
               <StyledButton htmlType={"submit"} loading={loading}>
-                {t("Login")}
+                {t("Register")}
               </StyledButton>
             </form>
           </TextFieldWrapper>
           <BottomTextWrapper>
-            <h1 className={"h1"}>{"Don't have an account?"}</h1>
-            <Link href={"/register"}>{"Register"}</Link>
+            <h1 className={"h1"}>{"Already have an account?"}</h1>
+            <Link href={"/login"}>{"Login"}</Link>
           </BottomTextWrapper>
         </LoginWrapper>
       </Container>
