@@ -1,5 +1,12 @@
 import React from "react"
+import { Layout } from "antd"
+import InputField from "../../atoms/InputField"
 
-export const Footer: React.FC = () => {
-  return <footer>{"Footer"}</footer>
+const { Footer } = Layout
+export const InputBox: React.FC = () => {
+  return (
+    <Footer>
+      <InputField />
+    </Footer>
+  )
 }
