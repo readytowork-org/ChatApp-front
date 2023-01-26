@@ -1,8 +1,7 @@
-import React from "react"
+import React, { useState } from "react"
 import Boy from "../../../public/assets/icons/boy.svg"
-import Girl from "../../../public/assets/icons/girl.svg"
 import styled from "styled-components"
-import { Layout, Menu } from "antd"
+import { Button, Layout, Menu } from "antd"
 import { InputBox } from "../Footer"
 import { MenuTheme } from "antd/lib/menu"
 import InputField from "../../atoms/InputField"
@@ -14,9 +13,10 @@ interface ISideNavBarProps {
 }
 
 const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
+  const [friendList, setFriendList] = useState([])
+
   const Body = styled.div`
     height: "100vh";
-
     .ant-layout-sider-children {
       height: 100vh;
       margin-left: 10px;
@@ -33,52 +33,68 @@ const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
     .ant-menu-dark.ant-menu-inline .ant-menu-item {
       width: 95%;
     }
-    .h1 {
+    .ant-btn.ant-btn-block {
+      width: 230px;
+    }
+    .menu-header {
       color: #ffffff;
       font-size: 20px;
       font-weight: bold;
     }
+    .menu-footer {
+      bottom: 20px;
+      color: #ffffff;
+      position: absolute;
+    }
   `
-  const friends = [
-    {
-      key: "1",
-      icon: <Boy />,
-      name: "hello",
-      label: "user 1",
-    },
-    {
-      key: "2",
-      icon: <Girl />,
-      name: "hello",
-      label: "user 2",
-    },
-    {
-      key: "3",
-      icon: <Boy />,
-      name: "hello",
-      label: "user 3",
-    },
-    {
-      key: "4",
-      icon: <Girl />,
-      name: "hello",
-      label: "user 4",
-    },
-    {
-      key: "5",
-      icon: <Boy />,
-      name: "hello",
-      label: "user 5",
-    },
-  ]
+  const Label = styled.div`
+    display: flex;
+    flex-direction: column;
+    .title {
+      font-size: 14px;
+      line-height: 20px;
+      color: #ffffff;
+    }
+    .sub-title {
+      font-size: 12px;
+      line-height: 20px;
+      color: #413f3f;
+    }
+  `
 
   return (
     <Body>
       <Layout>
         <Sider width={minWidth ?? "250px"}>
-          <h1 className={"h1"}>{"Chat App"}</h1>
+          <span className={"menu-header"}>{"Chat App"}</span>
           <InputField borderRadius={"5px"} placeHolder={"Search messages"} />
-          <Menu theme={theme ?? "dark"} mode={"inline"} items={friends}></Menu>
+          <Menu
+            theme={theme ?? "dark"}
+            mode={"inline"}
+            items={friendList}
+          ></Menu>
+          <div className={"menu-footer"}>
+            <Button
+              type={"primary"}
+              block
+              onClick={() => {
+                const newFriend = friendList.concat({
+                  key: "1",
+                  icon: <Boy />,
+
+                  label: (
+                    <Label>
+                      <span className={"title"}>{"User1"}</span>
+                      <span className={"sub-title"}>{"Hello"}</span>
+                    </Label>
+                  ),
+                })
+                setFriendList(newFriend)
+              }}
+            >
+              {"New chat"}
+            </Button>
+          </div>
         </Sider>
         <Layout>
           <Content
