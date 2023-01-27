@@ -7,6 +7,8 @@ interface IInputFieldProps {
   height?: string
   placeHolder?: string
   width?: string
+  prefix?: JSX.Element
+  suffix?: JSX.Element
 }
 const TextInputFieldWrapper = styled.div`
   .ant-input {
@@ -18,19 +20,24 @@ const TextInputFieldWrapper = styled.div`
 
 const InputStyled = styled(Input)`
   border-radius: ${({ borderRadius }: IInputFieldProps) =>
-    borderRadius || "10px"};
+    borderRadius || "5px"};
   height: ${({ height }: IInputFieldProps) => height || "auto"};
+  width: ${({ width }: IInputFieldProps) => width || "auto"};
 `
 const InputField: React.FunctionComponent<IInputFieldProps> = ({
   borderRadius,
   height,
   placeHolder,
   width,
+  prefix,
+  suffix,
 }) => {
   return (
     <TextInputFieldWrapper>
       <InputStyled
         width={width}
+        prefix={prefix}
+        suffix={suffix}
         height={height}
         placeHolder={placeHolder}
         borderRadius={borderRadius}
