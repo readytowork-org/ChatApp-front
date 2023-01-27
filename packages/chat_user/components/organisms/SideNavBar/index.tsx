@@ -1,10 +1,11 @@
 import React, { useState } from "react"
-import Boy from "../../../public/assets/icons/boy.svg"
 import styled from "styled-components"
-import { Button, Layout, Menu } from "antd"
-import { InputBox } from "../Footer"
+import { Avatar, Button, Layout, List, Menu, Modal } from "antd"
 import { MenuTheme } from "antd/lib/menu"
 import InputField from "../../atoms/InputField"
+import moment from "moment"
+import { FooterComponent } from "../Footer"
+import TextMessage from "../TextMessage"
 
 const { Sider, Content } = Layout
 interface ISideNavBarProps {
@@ -14,6 +15,19 @@ interface ISideNavBarProps {
 
 const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
   const [friendList, setFriendList] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleOk = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
 
   const Body = styled.div`
     height: "100vh";
@@ -31,10 +45,14 @@ const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
       margin-top: 20px;
     }
     .ant-menu-dark.ant-menu-inline .ant-menu-item {
+      height: 50px;
       width: 95%;
     }
     .ant-btn.ant-btn-block {
-      width: 230px;
+      width: 330px;
+    }
+    .anticon > * {
+      font-size: 20px;
     }
     .menu-header {
       color: #ffffff;
@@ -61,39 +79,240 @@ const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
       color: #413f3f;
     }
   `
+  const messages = [
+    {
+      key: "1",
+      incoming: false,
+      message: "Hello, How are you?",
+    },
+    {
+      key: "2",
+      incoming: true,
+      message: "Hello, I'm good and u",
+    },
+  ]
+  const data = [
+    {
+      key: "1",
+      icon: (
+        <Avatar
+          size={44}
+          src="https://imgs.search.brave.com/L2MSit2v_X-3MNNyEE1uK2hHgas6AHKIgN_Q2ns9E0c/rs:fit:800:800:1/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9ib3kt/ZmFjZS1hdmF0YXIt/cHJvZmlsZS1waWN0/dXJlLWJveS1mYWNl/LWF2YXRhci1wcm9m/aWxlLXBpY3R1cmUt/Y2FydG9vbi1jaGFy/YWN0ZXItcG9ydHJh/aXQtdmVjdG9yLWls/bHVzdHJhdGlvbi1n/cmFwaGljLWRlc2ln/bi0xNDk3NTU1MTAu/anBn"
+        />
+      ),
+
+      label: (
+        <Label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <span className={"title"}>{"User 1"}</span>
+            <span className={"sub-title"}>
+              {moment(Date()).format("YYYY/MM/DD")}
+            </span>
+          </div>
+          <span className={"sub-title"}>{"Hello"}</span>
+        </Label>
+      ),
+    },
+    {
+      key: "2",
+      icon: (
+        <Avatar
+          size={44}
+          src="https://imgs.search.brave.com/VdfGmA847MGM-1BHRhyarIc-lHIyQ3PjE5K-6Yof_xU/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9jZG4u/ZHJpYmJibGUuY29t/L3VzZXJzLzM3MTYy/OTYvc2NyZWVuc2hv/dHMvMTIyNTM3NjQv/YWxvLWlsbHVzdHJh/dGlvbl80eC5wbmc"
+        />
+      ),
+
+      label: (
+        <Label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <span className={"title"}>{"User 2"}</span>
+            <span className={"sub-title"}>
+              {moment(Date()).format("YYYY/MM/DD")}
+            </span>
+          </div>
+          <span className={"sub-title"}>{"Hello"}</span>
+        </Label>
+      ),
+    },
+    {
+      key: "3",
+      icon: (
+        <Avatar
+          size={44}
+          src="https://imgs.search.brave.com/L2MSit2v_X-3MNNyEE1uK2hHgas6AHKIgN_Q2ns9E0c/rs:fit:800:800:1/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9ib3kt/ZmFjZS1hdmF0YXIt/cHJvZmlsZS1waWN0/dXJlLWJveS1mYWNl/LWF2YXRhci1wcm9m/aWxlLXBpY3R1cmUt/Y2FydG9vbi1jaGFy/YWN0ZXItcG9ydHJh/aXQtdmVjdG9yLWls/bHVzdHJhdGlvbi1n/cmFwaGljLWRlc2ln/bi0xNDk3NTU1MTAu/anBn"
+        />
+      ),
+
+      label: (
+        <Label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <span className={"title"}>{"User 3"}</span>
+            <span className={"sub-title"}>
+              {moment(Date()).format("YYYY/MM/DD")}
+            </span>
+          </div>
+          <span className={"sub-title"}>{"Hello"}</span>
+        </Label>
+      ),
+    },
+    {
+      key: "4",
+      icon: (
+        <Avatar
+          size={44}
+          src="https://imgs.search.brave.com/VdfGmA847MGM-1BHRhyarIc-lHIyQ3PjE5K-6Yof_xU/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9jZG4u/ZHJpYmJibGUuY29t/L3VzZXJzLzM3MTYy/OTYvc2NyZWVuc2hv/dHMvMTIyNTM3NjQv/YWxvLWlsbHVzdHJh/dGlvbl80eC5wbmc"
+        />
+      ),
+
+      label: (
+        <Label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <span className={"title"}>{"User 4"}</span>
+            <span className={"sub-title"}>
+              {moment(Date()).format("YYYY/MM/DD")}
+            </span>
+          </div>
+          <span className={"sub-title"}>{"Hello"}</span>
+        </Label>
+      ),
+    },
+    {
+      key: "5",
+      icon: (
+        <Avatar
+          size={44}
+          src="https://imgs.search.brave.com/L2MSit2v_X-3MNNyEE1uK2hHgas6AHKIgN_Q2ns9E0c/rs:fit:800:800:1/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9ib3kt/ZmFjZS1hdmF0YXIt/cHJvZmlsZS1waWN0/dXJlLWJveS1mYWNl/LWF2YXRhci1wcm9m/aWxlLXBpY3R1cmUt/Y2FydG9vbi1jaGFy/YWN0ZXItcG9ydHJh/aXQtdmVjdG9yLWls/bHVzdHJhdGlvbi1n/cmFwaGljLWRlc2ln/bi0xNDk3NTU1MTAu/anBn"
+        />
+      ),
+
+      label: (
+        <Label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <span className={"title"}>{"User 5"}</span>
+            <span className={"sub-title"}>
+              {moment(Date()).format("YYYY/MM/DD")}
+            </span>
+          </div>
+          <span className={"sub-title"}>{"Hello"}</span>
+        </Label>
+      ),
+    },
+    {
+      key: "6",
+      icon: (
+        <Avatar
+          size={44}
+          src="https://imgs.search.brave.com/VdfGmA847MGM-1BHRhyarIc-lHIyQ3PjE5K-6Yof_xU/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9jZG4u/ZHJpYmJibGUuY29t/L3VzZXJzLzM3MTYy/OTYvc2NyZWVuc2hv/dHMvMTIyNTM3NjQv/YWxvLWlsbHVzdHJh/dGlvbl80eC5wbmc"
+        />
+      ),
+
+      label: (
+        <Label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <span className={"title"}>{"User 6"}</span>
+            <span className={"sub-title"}>
+              {moment(Date()).format("YYYY/MM/DD")}
+            </span>
+          </div>
+          <span className={"sub-title"}>{"Hello"}</span>
+        </Label>
+      ),
+    },
+  ]
 
   return (
     <Body>
       <Layout>
-        <Sider width={minWidth ?? "250px"}>
+        <Sider width={minWidth ?? "350px"}>
           <span className={"menu-header"}>{"Chat App"}</span>
-          <InputField borderRadius={"5px"} placeHolder={"Search messages"} />
+          <InputField placeHolder={"Search chat"} />
           <Menu
             theme={theme ?? "dark"}
             mode={"inline"}
             items={friendList}
           ></Menu>
           <div className={"menu-footer"}>
-            <Button
-              type={"primary"}
-              block
-              onClick={() => {
-                const newFriend = friendList.concat({
-                  key: "1",
-                  icon: <Boy />,
-
-                  label: (
-                    <Label>
-                      <span className={"title"}>{"User1"}</span>
-                      <span className={"sub-title"}>{"Hello"}</span>
-                    </Label>
-                  ),
-                })
-                setFriendList(newFriend)
-              }}
-            >
+            <Button type={"primary"} block onClick={showModal}>
               {"New chat"}
             </Button>
+            <Modal
+              title="Add Friends"
+              open={isModalOpen}
+              onOk={handleOk}
+              onCancel={handleCancel}
+              okButtonProps={{ style: { display: "none" } }}
+              cancelButtonProps={{ style: { display: "none" } }}
+            >
+              <List
+                itemLayout="horizontal"
+                dataSource={data}
+                renderItem={(item) => (
+                  <List.Item>
+                    <List.Item.Meta
+                      avatar={
+                        <Avatar src="https://imgs.search.brave.com/k01hc-j_4vEv8Syhy4uYJDSUjmJiiakiCWrjDgY7a5I/rs:fit:640:640:1/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vNzM2/eC84Yi8xNi83YS84/YjE2N2FmNjUzYzIz/OTlkZDkzYjk1MmE0/ODc0MDYyMC5qcGc" />
+                      }
+                      title={
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <span> User {item.key}</span>
+                          <Button
+                            type="text"
+                            onClick={() => {
+                              setFriendList(friendList.concat(item))
+                              setIsModalOpen(false)
+                            }}
+                          >
+                            Add
+                          </Button>
+                        </div>
+                      }
+                    />
+                  </List.Item>
+                )}
+              />
+            </Modal>
           </div>
         </Sider>
         <Layout>
@@ -104,9 +323,16 @@ const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
               background: "#ffffff",
             }}
           >
-            {"User 1"}
+            {messages.map((message) => {
+              return (
+                <TextMessage
+                  incoming={message.incoming}
+                  message={message.message}
+                />
+              )
+            })}
           </Content>
-          <InputBox />
+          <FooterComponent />
         </Layout>
       </Layout>
     </Body>
