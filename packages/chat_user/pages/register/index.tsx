@@ -30,7 +30,7 @@ const Container = styled.div`
   }
 `
 
-const LoginWrapper = styled.div`
+const RegisterWrapper = styled.div`
   display: flex;
   margin: auto;
   justify-content: center;
@@ -86,12 +86,12 @@ const InputFieldWrapper = styled.div`
   margin-bottom: 25px;
 `
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
   const { t } = useTranslation()
   const [loading, setLoading] = React.useState(false)
 
-  const handleLoginFormSubmit = () => {
-    handleLogin()
+  const handleRegisterFormSubmit = () => {
+    handleRegister()
   }
 
   const validationSchema = yup.object().shape({
@@ -108,10 +108,10 @@ const LoginPage: React.FC = () => {
       password: "",
     },
     validationSchema,
-    onSubmit: handleLoginFormSubmit,
+    onSubmit: handleRegisterFormSubmit,
   })
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setLoading(true)
     try {
       const data = await createUserWithEmailAndPassword(
@@ -140,7 +140,7 @@ const LoginPage: React.FC = () => {
       } else if (errorCode === "auth/user-disabled") {
         message.error({
           content: t(
-            "We could not login you at this moment. Please contact your administration for inquiry"
+            "We could not register you at this moment. Please contact your administration for inquiry"
           ),
           key: "3",
           icon: <CloseCircleFilled onClick={() => message.destroy("3")} />,
@@ -169,7 +169,7 @@ const LoginPage: React.FC = () => {
         <title>{"Register"}</title>
       </Head>
       <Container>
-        <LoginWrapper>
+        <RegisterWrapper>
           <span className={"header"}>{"Register"}</span>
           <TextFieldWrapper>
             <form onSubmit={formik.handleSubmit}>
@@ -209,10 +209,10 @@ const LoginPage: React.FC = () => {
             <h1 className={"h1"}>{"Already have an account?"}</h1>
             <Link href={"/login"}>{"Login"}</Link>
           </BottomTextWrapper>
-        </LoginWrapper>
+        </RegisterWrapper>
       </Container>
     </>
   )
 }
 
-export default RestrictedRoute(LoginPage)
+export default RestrictedRoute(RegisterPage)
