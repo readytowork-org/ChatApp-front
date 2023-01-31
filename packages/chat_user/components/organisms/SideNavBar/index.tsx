@@ -6,6 +6,7 @@ import InputField from "../../atoms/InputField"
 import moment from "moment"
 import { FooterComponent } from "../Footer"
 import TextMessage from "../TextMessage"
+import EmojiPicker from "../../atoms/EmojiPicker"
 
 const { Sider, Content } = Layout
 interface ISideNavBarProps {
@@ -15,8 +16,14 @@ interface ISideNavBarProps {
 
 const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
   const [friendList, setFriendList] = useState([])
+  const [message, setMessage] = useState([
+    {
+      incoming: true,
+      message: "Hello, How are you?",
+    },
+  ])
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const [openEmojiPicker, setOpenEmojiPicker] = useState(false)
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -82,12 +89,12 @@ const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
   const messages = [
     {
       key: "1",
-      incoming: false,
+      incoming: true,
       message: "Hello, How are you?",
     },
     {
       key: "2",
-      incoming: true,
+      incoming: false,
       message: "Hello, I'm good and u",
     },
   ]
@@ -318,12 +325,14 @@ const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
         <Layout>
           <Content
             style={{
+              alignContent: "end",
+
               padding: 24,
               minHeight: 280,
               background: "#ffffff",
             }}
           >
-            {messages.map((message) => {
+            {message.map((message) => {
               return (
                 <TextMessage
                   incoming={message.incoming}
@@ -332,7 +341,22 @@ const SideNavBar: React.FC<ISideNavBarProps> = ({ theme, minWidth }) => {
               )
             })}
           </Content>
-          <FooterComponent />
+          <div
+            style={{
+              bottom: 81,
+              zIndex: 10,
+              right: 40,
+              display: openEmojiPicker ? "inline" : "none",
+              position: "fixed",
+            }}
+          >
+            <EmojiPicker />
+          </div>
+          <FooterComponent
+            setMessage={setMessage}
+            messageList={message}
+            suffixIconClick={() => setOpenEmojiPicker((prev) => !prev)}
+          />
         </Layout>
       </Layout>
     </Body>
