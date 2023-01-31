@@ -7,6 +7,10 @@ interface IInputFieldProps {
   height?: string
   placeHolder?: string
   width?: string
+  onChange?: any
+  name?: string
+  value?: any
+  maxLength?: number
   prefix?: JSX.Element
   suffix?: JSX.Element
 }
@@ -31,10 +35,18 @@ const InputField: React.FunctionComponent<IInputFieldProps> = ({
   width,
   prefix,
   suffix,
+  onChange,
+  maxLength,
+  name,
+  value,
 }) => {
   return (
     <TextInputFieldWrapper>
       <InputStyled
+        value={value}
+        name={name}
+        maxLength={maxLength}
+        onChange={onChange}
         width={width}
         prefix={prefix}
         suffix={suffix}
