@@ -1,7 +1,7 @@
+import { Button } from "antd"
 import { ReactNode } from "react"
 import styled from "styled-components"
 import { theme } from "../../../theme"
-import { Button } from "antd"
 
 type ButtonType = "primary" | "link"
 export interface ButtonProps {
@@ -33,7 +33,7 @@ export interface ButtonProps {
 const Wrapper = styled.div`
   display: contents;
   & .ant-btn-primary {
-    background: ${theme.blue2};
+    background: ${theme.purple};
 
     box-shadow: 0px 0px 12px rgba(28, 86, 225, 0.51);
     font-size: 16px;
@@ -59,7 +59,7 @@ const StyledButton = styled(Button)`
     box-shadow: none !important;
     color: ${theme.base};
   }
-  border-color: ${theme.blue2};
+  border-color: ${theme.purple};
 
   border-radius: ${({ borderradius, noradius }: ButtonProps) => {
     return noradius ? "none" : borderradius ? borderradius : "100px"
@@ -80,7 +80,7 @@ const StyledButton = styled(Button)`
   }};
 
   background: ${({ background }: ButtonProps) => {
-    return background ? background : theme.blue2
+    return background ? background : theme.purple
   }};
 
   color: ${({ color }: ButtonProps) => {
