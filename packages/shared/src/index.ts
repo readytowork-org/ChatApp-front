@@ -1,3 +1,4 @@
+export { API } from "./api"
 export * from "./components/atom"
 export * from "./firebase"
 export { i18next } from "./i18n"
