@@ -1,14 +1,14 @@
-import { CloseCircleFilled } from "@ant-design/icons"
-import { Button, TextField, auth, theme } from "@project/shared"
-import { message } from "antd"
-import { createUserWithEmailAndPassword } from "firebase/auth"
+import { Button, TextField, theme } from "@project/shared"
+import notification from "antd/lib/notification"
 import { useFormik } from "formik"
 import Head from "next/head"
 import Link from "next/link"
 import React from "react"
 import { useTranslation } from "react-i18next"
+import { useMutation } from "react-query"
 import styled from "styled-components"
 import * as yup from "yup"
+import { performRegister } from "../../services/auth"
 
 interface RegisterType {
   email: string
@@ -86,11 +86,18 @@ const InputFieldWrapper = styled.div`
 
 const RegisterPage: React.FC = () => {
   const { t } = useTranslation()
-  const [loading, setLoading] = React.useState(false)
-
-  const handleLoginFormSubmit = () => {
-    handleLogin()
-  }
+  const { mutate, isLoading } = useMutation(performRegister, {
+    onSuccess: () => {
+      notification.error({
+        message: t("register successful"),
+      })
+    },
+    onError: () => {
+      notification.error({
+        message: t("register failed"),
+      })
+    },
+  })
 
   const validationSchema = yup.object().shape({
     email: yup
@@ -106,59 +113,12 @@ const RegisterPage: React.FC = () => {
       password: "",
     },
     validationSchema,
-    onSubmit: handleLoginFormSubmit,
+    onSubmit: (values) => {
+      mutate({
+        ...values,
+      })
+    },
   })
-
-  const handleLogin = async () => {
-    setLoading(true)
-    try {
-      const data = await createUserWithEmailAndPassword(
-        auth,
-        formik.values.email,
-        formik.values.password
-      )
-
-      if (!data || !data.user || !auth.currentUser) {
-        return
-      }
-    } catch (error) {
-      const errorCode = error.code
-      if (errorCode === "auth/user-not-found") {
-        message.error({
-          content: t("Email address or password does not match."),
-          key: "1",
-          icon: <CloseCircleFilled onClick={() => message.destroy("1")} />,
-        })
-      } else if (errorCode === "auth/wrong-password") {
-        message.error({
-          content: t("Email address or password does not match."),
-          key: "2",
-          icon: <CloseCircleFilled onClick={() => message.destroy("2")} />,
-        })
-      } else if (errorCode === "auth/user-disabled") {
-        message.error({
-          content: t(
-            "We could not login you at this moment. Please contact your administration for inquiry"
-          ),
-          key: "3",
-          icon: <CloseCircleFilled onClick={() => message.destroy("3")} />,
-        })
-      } else if (errorCode == "auth/email-already-in-use") {
-        message.error({
-          content: t("Email Address is already in use"),
-          key: "4",
-          icon: <CloseCircleFilled onClick={() => message.destroy("4")} />,
-        })
-      } else {
-        message.error({
-          key: "5",
-          icon: <CloseCircleFilled onClick={() => message.destroy("5")} />,
-          content: t("An error has occurred. Please try again later."),
-        })
-      }
-    }
-    setLoading(false)
-  }
 
   return (
     <>
@@ -242,7 +202,7 @@ const RegisterPage: React.FC = () => {
                   width={"340px"}
                 />
               </InputFieldWrapper>
-              <StyledButton htmlType={"submit"} loading={loading}>
+              <StyledButton htmlType={"submit"} loading={isLoading}>
                 {t("Register")}
               </StyledButton>
             </form>

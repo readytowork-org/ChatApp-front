@@ -1,17 +1,18 @@
-import { CloseCircleFilled } from "@ant-design/icons"
-import { Button, TextField, auth, theme } from "@project/shared"
-import { message } from "antd"
-import { signInWithEmailAndPassword } from "firebase/auth"
+import { Button, TextField, theme } from "@project/shared"
+import notification from "antd/lib/notification"
 import { useFormik } from "formik"
 import Head from "next/head"
 import Link from "next/link"
-import React from "react"
+import React, { useContext } from "react"
 import { useTranslation } from "react-i18next"
+import { useMutation } from "react-query"
 import styled from "styled-components"
 import * as yup from "yup"
+import { performLogin } from "../../services/auth"
+import { AuthContext, setAuthUser } from "../../utils/AuthContext"
 
 interface LoginType {
-  email: string
+  phone: string
   password: string
 }
 
@@ -85,79 +86,35 @@ const InputFieldWrapper = styled.div`
 
 const LoginPage: React.FC = () => {
   const { t } = useTranslation()
-  const [loading, setLoading] = React.useState(false)
-
-  const handleLoginFormSubmit = () => {
-    handleLogin()
-  }
+  const { setUser } = useContext(AuthContext)
+  const { mutate, isLoading } = useMutation(performLogin, {
+    onSuccess: ({ data }) => {
+      setAuthUser(data, (user) => setUser(user))
+    },
+    onError: () => {
+      notification.error({
+        message: t("Failed to find user"),
+      })
+    },
+  })
 
   const validationSchema = yup.object().shape({
-    email: yup
-      .string()
-      .email(t("Please enter your e-mail address"))
-      .required(t("Please enter")),
+    phone: yup.string().required(t("Please enter")),
     password: yup.string().required(t("Please enter")),
   })
 
   const formik = useFormik<LoginType>({
     initialValues: {
-      email: "",
+      phone: "",
       password: "",
     },
     validationSchema,
-    onSubmit: handleLoginFormSubmit,
+    onSubmit: (values) => {
+      mutate({
+        ...values,
+      })
+    },
   })
-
-  const handleLogin = async () => {
-    setLoading(true)
-    try {
-      const data = await signInWithEmailAndPassword(
-        auth,
-        formik.values.email,
-        formik.values.password
-      )
-
-      if (!data || !data.user || !auth.currentUser) {
-        return
-      }
-    } catch (error) {
-      const errorCode = error.code
-      if (errorCode === "auth/user-not-found") {
-        message.error({
-          content: t("Email address or password does not match."),
-          key: "1",
-          icon: <CloseCircleFilled onClick={() => message.destroy("1")} />,
-        })
-      } else if (errorCode === "auth/wrong-password") {
-        message.error({
-          content: t("Email address or password does not match."),
-          key: "2",
-          icon: <CloseCircleFilled onClick={() => message.destroy("2")} />,
-        })
-      } else if (errorCode === "auth/user-disabled") {
-        message.error({
-          content: t(
-            "We could not login you at this moment. Please contact your administration for inquiry"
-          ),
-          key: "3",
-          icon: <CloseCircleFilled onClick={() => message.destroy("3")} />,
-        })
-      } else if (errorCode == "auth/email-already-in-use") {
-        message.error({
-          content: t("Email Address is already in use"),
-          key: "4",
-          icon: <CloseCircleFilled onClick={() => message.destroy("4")} />,
-        })
-      } else {
-        message.error({
-          key: "5",
-          icon: <CloseCircleFilled onClick={() => message.destroy("5")} />,
-          content: t("An error has occurred. Please try again later."),
-        })
-      }
-    }
-    setLoading(false)
-  }
 
   return (
     <>
@@ -171,12 +128,12 @@ const LoginPage: React.FC = () => {
             <form onSubmit={formik.handleSubmit}>
               <InputFieldWrapper>
                 <TextField
-                  name={"email"}
-                  error={formik.touched.email && formik.errors.email}
+                  name={"phone"}
+                  error={formik.touched.phone && formik.errors.phone}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  label={t("Email address")}
-                  placeholder={t("Email address")}
+                  label={t("Phone number")}
+                  placeholder={t("Phone number")}
                   className={"text-field"}
                   height={"40px"}
                   width={"340px"}
@@ -196,7 +153,7 @@ const LoginPage: React.FC = () => {
                   width={"340px"}
                 />
               </InputFieldWrapper>
-              <StyledButton htmlType={"submit"} loading={loading}>
+              <StyledButton htmlType={"submit"} loading={isLoading}>
                 {t("Login")}
               </StyledButton>
             </form>

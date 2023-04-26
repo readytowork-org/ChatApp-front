@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React, { useCallback } from "react"
 import { Input } from "antd"
+import React, { useCallback } from "react"
 import styled from "styled-components"
 import { theme } from "../../../theme"
 import { CharacterCounter } from "../../../utils"
@@ -44,19 +44,18 @@ const InputStyled = styled(Input)`
   height: ${({ height }: TextFieldProps) => height || "60px"};
   border: ${({ bordercolor }: TextFieldProps) =>
     `1px solid ${bordercolor || theme.borderColorBase}`};
-  background: ${theme.base};
+  background: ${theme.titanWhite};
   width: ${({ width, fullWidth }: TextFieldProps) =>
     fullWidth ? "100%" : width || "auto"};
-  text-indent: ${({ indent }: TextFieldProps) => indent || "0px"};
+  text-indent: ${({ indent }: TextFieldProps) => indent || "10px"};
   ::placeholder {
     color: ${({ placeholdercolor }) =>
       (placeholdercolor && placeholdercolor) || theme.placeholder};
     text-indent: ${({ indent }: TextFieldProps) => indent || "6px"};
     vertical-align: middle;
+    padding: 5px;
   }
   position: relative;
-  box-shadow: ${({ disableboxshadow }) =>
-    disableboxshadow ? "none" : "inset 0px 2px 5px rgba(0, 0, 0, 20%)"};
 `
 
 const ErrorStyled = styled.span`
@@ -82,13 +81,13 @@ const TextFieldWrapperStyled = styled.div`
   flex-direction: column;
   width: ${({ width, fullWidth }: TextFieldProps) =>
     fullWidth ? "100%" : width || "auto"};
-  }
+
   .ant-input {
     &:focus,
-    &:hover,
-    &:active {
-      border-color: #8B94A5;
+    &:hover &:active {
+      border-color: #6974ca;
     }
+  }
 `
 
 const LabelContainer = styled.div`
@@ -102,17 +101,9 @@ const Label = styled.div`
   font-weight: 500;
 `
 
-const RequiredLabel = styled.div`
+const RequiredLabel = styled.span`
   ${theme.typography.PackDesc};
   color: #f5222d;
-  min-width: 40px;
-  height: 22px;
-  display: flex;
-  justify-content: center;
-  background: #fff1f0;
-  border: 1px solid #ffa39e;
-  border-radius: 2px;
-  align-items: center;
 `
 
 const TextField: React.FC<TextFieldProps> = React.forwardRef((props, ref) => {
@@ -149,7 +140,7 @@ const TextField: React.FC<TextFieldProps> = React.forwardRef((props, ref) => {
             {label && (
               <LabelContainer>
                 <Label>{label}</Label>
-                {required && <RequiredLabel>{"必須"}</RequiredLabel>}
+                {required && <RequiredLabel>{"*"}</RequiredLabel>}
               </LabelContainer>
             )}
             <InputStyled {...rest} type={"password"} />
@@ -165,7 +156,7 @@ const TextField: React.FC<TextFieldProps> = React.forwardRef((props, ref) => {
             {label && (
               <LabelContainer>
                 <Label>{label}</Label>
-                {required && <RequiredLabel>{"必須"}</RequiredLabel>}
+                {required && <RequiredLabel>{"*"}</RequiredLabel>}
               </LabelContainer>
             )}
             <InputStyled
@@ -188,7 +179,7 @@ const TextField: React.FC<TextFieldProps> = React.forwardRef((props, ref) => {
             {label && (
               <LabelContainer>
                 <Label>{label}</Label>
-                {required && <RequiredLabel>{"必須"}</RequiredLabel>}
+                {required && <RequiredLabel>{"*"}</RequiredLabel>}
               </LabelContainer>
             )}
             <InputStyled
@@ -211,7 +202,7 @@ const TextField: React.FC<TextFieldProps> = React.forwardRef((props, ref) => {
             {label && (
               <LabelContainer>
                 <Label>{label}</Label>
-                {required && <RequiredLabel>{"必須"}</RequiredLabel>}
+                {required && <RequiredLabel>{"*"}</RequiredLabel>}
               </LabelContainer>
             )}
             <InputStyled
